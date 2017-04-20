@@ -1,0 +1,6 @@
+filter:
+    excluded_paths:
+        - templates/*
+checks:
+    php:
+        duplication: false
