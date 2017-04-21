@@ -169,7 +169,7 @@ class Settings extends BackendController
             $this->setSubmitted('header', $header);
         } else {
             $vars = array('@num' => implode(',', $errors));
-            $this->setError('header', $this->language->text('Error on line @num', $vars));
+            $this->setError('header', $this->text('Error on line @num', $vars));
         }
     }
 

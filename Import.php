@@ -86,7 +86,7 @@ class Import extends Module
 
         // Import page
         $routes['admin/tool/import'] = array(
-            'menu' => array('admin' => 'Import products'),
+            'menu' => array('admin' => 'Import'),
             'access' => 'import_product',
             'handlers' => array(
                 'controller' => array('gplcart\\modules\\import\\controllers\\Import', 'doImport')

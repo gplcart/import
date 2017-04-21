@@ -194,7 +194,6 @@ class Import
      */
     protected function prepare(array $row)
     {
-        $skip = false;
         $this->job['context']['line'] ++;
         $this->data = array_filter(array_map('trim', $row));
 

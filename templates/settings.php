@@ -17,7 +17,7 @@
           <div class="help-block">
             <?php echo $this->error('limit'); ?>
             <div class="text-muted">
-              <?php echo $this->text('How many products to process per one iteration. Depends on your PHP settings and server capability'); ?>
+              <?php echo $this->text('How many items to process per one iteration. Depends on your PHP settings and server capability'); ?>
             </div>
           </div>
         </div>
@@ -62,7 +62,7 @@
         <div class="col-md-6 col-md-offset-2">
           <div class="btn-toolbar">
             <a href="<?php echo $this->url("admin/module/list"); ?>" class="btn btn-default"><?php echo $this->text("Cancel"); ?></a>
-            <button class="btn btn-default save" name="save" value="1" onclick="return confirm(GplCart.text('Are you sure?'));"><?php echo $this->text('Save'); ?></button>
+            <button class="btn btn-default save" name="save" value="1"><?php echo $this->text('Save'); ?></button>
             <button class="btn btn-default reset pull-right" name="reset" value="1" onclick="return confirm(GplCart.text('Are you sure?'));"><?php echo $this->text('Reset to default'); ?></button>
           </div>
         </div>

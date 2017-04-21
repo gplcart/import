@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @package Importer 
- * @author Iurii Makukh  
- * @copyright Copyright (c) 2017, Iurii Makukh  
- * @license https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0+ 
+ * @package Importer
+ * @author Iurii Makukh
+ * @copyright Copyright (c) 2017, Iurii Makukh
+ * @license https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0+
  */
 
 namespace gplcart\modules\import\controllers;
@@ -97,7 +97,7 @@ class Import extends BackendController
     }
 
     /**
-     * Renders the import operations overview page
+     * Renders the import page
      */
     protected function outputDoImport()
     {
