@@ -348,10 +348,7 @@ class Import
     protected function downloadImage($url)
     {
         $path = $this->product->getImagePath();
-
-        $result = $this->file->setUploadPath($path)
-                ->setHandler('image')
-                ->wget($url);
+        $result = $this->file->download($url, 'image', $path);
 
         if ($result === true) {
             return $this->file->getUploadedFile(true);
