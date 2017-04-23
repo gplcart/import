@@ -159,7 +159,6 @@ class Import extends BackendController
             return false;
         }
 
-        $uploaded = $this->file->getUploadedFile();
 
         $this->setSubmitted('filepath', $uploaded);
         $this->setSubmitted('filesize', filesize($uploaded));
