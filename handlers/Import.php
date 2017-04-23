@@ -91,8 +91,7 @@ class Import
      * @param CsvHelper $csv
      */
     public function __construct(ProductModel $product, UserModel $user,
-            FileModel $file, LanguageModel $language, ValidatorModel $validator,
-            CsvHelper $csv)
+            FileModel $file, LanguageModel $language, ValidatorModel $validator, CsvHelper $csv)
     {
         $this->csv = $csv;
         $this->user = $user;
@@ -351,7 +350,7 @@ class Import
         $result = $this->file->download($url, 'image', $path);
 
         if ($result === true) {
-            return $this->file->getUploadedFile(true);
+            return $this->file->getTransferred(true);
         }
 
         $this->setError($result);
