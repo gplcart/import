@@ -26,51 +26,6 @@ class Import extends Module
     }
 
     /**
-     * Module info
-     * @return array
-     */
-    public function info()
-    {
-        return array(
-            'name' => 'Importer',
-            'version' => '1.0.0-dev',
-            'description' => 'Allows to import products from CSV files',
-            'author' => 'Iurii Makukh ',
-            'core' => '1.x',
-            'license' => 'GPL-3.0+',
-            'configure' => 'admin/module/settings/import',
-            'settings' => $this->getDefaultSettings()
-        );
-    }
-
-    /**
-     * Returns an array of default module settings
-     * @return array
-     */
-    protected function getDefaultSettings()
-    {
-        return array(
-            'limit' => 10,
-            'delimiter' => ',',
-            'multiple' => '|',
-            'mode' => 'create_update',
-            'update' => array('price', 'stock'),
-            'header' => array(
-                'product_id' => 'Product ID', 'title' => 'Title', 'sku' => 'SKU',
-                'price' => 'Price', 'currency' => 'Currency', 'stock' => 'Stock',
-                'product_class_id' => 'Product class ID', 'store_id' => 'Store ID',
-                'category_id' => 'Category ID', 'brand_category_id' => 'Brand category ID',
-                'alias' => 'Alias', 'images' => 'Images',
-                'status' => 'Enabled', 'description' => 'Description',
-                'meta_title' => 'Meta title', 'meta_description' => 'Meta description',
-                'related' => 'Related product ID', 'width' => 'Width', 'height' => 'Height',
-                'length' => 'Length', 'size_unit' => 'Size unit',
-                'weight' => 'Weight', 'weight_unit' => 'Weight unit',
-            ),
-        );
-    }
-
-    /**
      * Implements hook "route.list"
      * @param mixed $routes
      */
