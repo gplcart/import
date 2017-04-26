@@ -109,7 +109,7 @@ class Import extends BackendController
      */
     protected function downloadErrorsImport()
     {
-        $file = GC_PRIVATE_LOGS_DIR . '/import_module_errors.csv';
+        $file = GC_PRIVATE_TEMP_DIR . '/import_module_errors.csv';
         if ($this->isQuery('download_errors') && is_file($file)) {
             $this->download($file);
         }
@@ -214,7 +214,7 @@ class Import extends BackendController
                     '@url' => $this->url('', array('download_errors' => true))))
             ),
             'log' => array(
-                'errors' => GC_PRIVATE_LOGS_DIR . '/import_module_errors.csv'
+                'errors' => GC_PRIVATE_TEMP_DIR . '/import_module_errors.csv'
             )
         );
 
