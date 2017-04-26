@@ -56,7 +56,7 @@ class Import extends Module
     {
         // Automatically delete uploaded files older than 1 day
         $lifespan = 86400;
-        $directory = GC_PRIVATE_DIR . '/import';
+        $directory = GC_PRIVATE_MODULE_DIR . '/import';
         if (is_dir($directory)) {
             gplcart_file_delete($directory, array('csv'), $lifespan);
         }

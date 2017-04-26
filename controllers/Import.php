@@ -152,7 +152,7 @@ class Import extends BackendController
             return false;
         }
 
-        $result = $this->file->upload($file, 'csv', GC_PRIVATE_DIR . '/import');
+        $result = $this->file->upload($file, 'csv', GC_PRIVATE_MODULE_DIR . '/import');
 
         if ($result !== true) {
             $this->setError('file', $result);
