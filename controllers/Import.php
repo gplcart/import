@@ -208,13 +208,15 @@ class Import extends BackendController
             'id' => 'import_product',
             'total' => $submitted['filesize'],
             'data' => array_merge($settings, $submitted),
-            'log' => array('errors' => GC_PRIVATE_LOGS_DIR . '/import_module_errors.csv'),
-            'redirect_message' => array('finish' => 'Success. Inserted: %inserted, updated: %updated')
+            'redirect_message' => array(
+                'finish' => 'Success. Inserted: %inserted, updated: %updated',
+                'errors' => $this->text('Inserted: %inserted, updated: %updated, errors: %errors. <a href="@url">See error log</a>', array(
+                    '@url' => $this->url('', array('download_errors' => true))))
+            ),
+            'log' => array(
+                'errors' => GC_PRIVATE_LOGS_DIR . '/import_module_errors.csv'
+            )
         );
-
-        $options = array('!url' => $this->url('', array('download_errors' => true)));
-        $error = $this->text('Inserted: %inserted, updated: %updated, errors: %errors. <a href="!url">See error log</a>', $options);
-        $job['redirect_message']['errors'] = $error;
 
         $this->job->submit($job);
     }
