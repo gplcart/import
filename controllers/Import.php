@@ -111,7 +111,7 @@ class Import extends BackendController
     {
         $file = GC_PRIVATE_LOGS_DIR . '/import_module_errors.csv';
         if ($this->isQuery('download_errors') && is_file($file)) {
-            $this->response->download($file);
+            $this->download($file);
         }
     }
 

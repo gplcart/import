@@ -58,7 +58,7 @@ class Settings extends BackendController
     protected function downloadTemplateSettings()
     {
         if ($this->isQuery('download_template')) {
-            $this->response->download(__DIR__ . '/../templates/data.csv');
+            $this->download(__DIR__ . '/../templates/data.csv');
         }
     }
 
