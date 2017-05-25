@@ -63,6 +63,4 @@
     </form>
   </div>
 </div>
-<?php if (!empty($job)) { ?>
-<?php echo $job; ?>
-<?php } ?>
+<?php echo $_job; ?>

@@ -58,7 +58,6 @@ class Import extends BackendController
      */
     public function doImport()
     {
-        $this->setJob();
         $this->downloadErrorsImport();
 
         $settings = $this->config->module('import');
