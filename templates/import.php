@@ -9,7 +9,7 @@
 <div class="panel panel-default">
   <div class="panel-body">
     <form method="post" enctype="multipart/form-data" class="form-horizontal" onsubmit="return confirm(GplCart.text('Are you sure?'));">
-      <input type="hidden" name="token" value="<?php echo $this->prop('token'); ?>">
+      <input type="hidden" name="token" value="<?php echo $_token; ?>">
       <div class="form-group required<?php echo $this->error('file', ' has-error'); ?>">
         <label class="col-md-2 control-label"><?php echo $this->text('CSV file'); ?></label>
         <div class="col-md-4">
