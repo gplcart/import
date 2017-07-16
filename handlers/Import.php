@@ -210,7 +210,7 @@ class Import
         }
 
         if (empty($this->data['update']) && empty($this->data['user_id'])) {
-            $this->data['user_id'] = (int) $this->user->getSession('user_id');
+            $this->data['user_id'] = $this->user->getId();
         }
 
         return true;
