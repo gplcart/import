@@ -31,7 +31,6 @@ class Import extends Module
      */
     public function hookRouteList(&$routes)
     {
-        // Settings
         $routes['admin/module/settings/import'] = array(
             'access' => 'module_edit',
             'handlers' => array(
@@ -39,7 +38,6 @@ class Import extends Module
             )
         );
 
-        // Import page
         $routes['admin/tool/import'] = array(
             'menu' => array('admin' => 'Import'),
             'access' => 'import_product',
