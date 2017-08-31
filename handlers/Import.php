@@ -91,7 +91,8 @@ class Import
      * @param CsvHelper $csv
      */
     public function __construct(ProductModel $product, UserModel $user,
-            FileModel $file, LanguageModel $language, ValidatorModel $validator, CsvHelper $csv)
+            FileModel $file, LanguageModel $language, ValidatorModel $validator,
+            CsvHelper $csv)
     {
         $this->csv = $csv;
         $this->user = $user;
@@ -320,16 +321,16 @@ class Import
         }
 
         $path = trim($image, '/');
-        $fullpath = GC_FILE_DIR . "/$path";
+        $file = gplcart_file_absolute_path($path);
 
-        if (!is_file($fullpath)) {
+        if (!is_file($file)) {
             $vars = array('@name' => $path);
             $error = $this->language->text('@name is unavailable', $vars);
             $this->setError($error);
             return false;
         }
 
-        $result = $this->file->validate($fullpath);
+        $result = $this->file->validate($file);
 
         if ($result === true) {
             return $path;
