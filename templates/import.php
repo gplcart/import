@@ -6,7 +6,7 @@
  * @license https://www.gnu.org/licenses/gpl.html GNU/GPLv3
  */
 ?>
-<form method="post" enctype="multipart/form-data" class="form-horizontal" onsubmit="return confirm(GplCart.text('Are you sure?'));">
+<form method="post" enctype="multipart/form-data" class="form-horizontal" onsubmit="return confirm(Gplcart.text('Are you sure?'));">
   <input type="hidden" name="token" value="<?php echo $_token; ?>">
   <div class="form-group required<?php echo $this->error('file', ' has-error'); ?>">
     <label class="col-md-2 control-label"><?php echo $this->text('CSV file'); ?></label>
