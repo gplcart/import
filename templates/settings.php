@@ -21,13 +21,13 @@
     </div>
   </div>
   <div class="form-group required<?php echo $this->error('delimiter', ' has-error'); ?>">
-    <label class="col-md-2 control-label"><?php echo $this->text('Column delititer'); ?></label>
+    <label class="col-md-2 control-label"><?php echo $this->text('Column delimiter'); ?></label>
     <div class="col-md-4">
       <input name="settings[delimiter]" class="form-control" value="<?php echo $this->e($settings['delimiter']); ?>">
       <div class="help-block">
         <?php echo $this->error('delimiter'); ?>
         <div class="text-muted">
-          <?php echo $this->text('A character to separate columns in your CSV file'); ?>
+          <?php echo $this->text('Character that separates columns in your CSV file'); ?>
         </div>
       </div>
     </div>
@@ -39,7 +39,7 @@
       <div class="help-block">
         <?php echo $this->error('multiple'); ?>
         <div class="text-muted">
-          <?php echo $this->text('A character to separate multiple values in a CSV row'); ?>
+          <?php echo $this->text('Character that separates multiple values in a CSV row'); ?>
         </div>
       </div>
     </div>

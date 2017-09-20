@@ -39,7 +39,7 @@ class Import extends Module
         );
 
         $routes['admin/tool/import'] = array(
-            'menu' => array('admin' => 'Import'),
+            'menu' => array('admin' => /* @text */'Import'),
             'access' => 'import_product',
             'handlers' => array(
                 'controller' => array('gplcart\\modules\\import\\controllers\\Import', 'doImport')
@@ -53,7 +53,7 @@ class Import extends Module
     public function hookCron()
     {
         // Automatically delete uploaded files older than 1 day
-        $lifespan = 24*60*60;
+        $lifespan = 24 * 60 * 60;
         $directory = GC_PRIVATE_MODULE_DIR . '/import';
         if (is_dir($directory)) {
             gplcart_file_delete($directory, array('csv'), $lifespan);
@@ -66,7 +66,7 @@ class Import extends Module
      */
     public function hookUserRolePermissions(array &$permissions)
     {
-        $permissions['import_product'] = 'Importer: import products';
+        $permissions['import_product'] = /* @text */'Importer: import products';
     }
 
     /**
