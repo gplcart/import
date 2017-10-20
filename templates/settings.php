@@ -59,7 +59,7 @@
   <div class="form-group">
     <div class="col-md-6 col-md-offset-2">
       <div class="btn-toolbar">
-        <button class="btn btn-danger reset" name="reset" value="1" onclick="return confirm(Gplcart.text('Are you sure?'));"><?php echo $this->text('Reset to default'); ?></button>
+        <button class="btn btn-danger reset" name="reset" value="1" onclick="return confirm('<?php echo $this->text('Are you sure?'); ?>');"><?php echo $this->text('Reset to default'); ?></button>
         <a href="<?php echo $this->url("admin/module/list"); ?>" class="btn btn-default"><?php echo $this->text("Cancel"); ?></a>
         <button class="btn btn-default save" name="save" value="1"><?php echo $this->text('Save'); ?></button>
       </div>
