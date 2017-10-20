@@ -108,7 +108,7 @@ class Import extends BackendController
      */
     protected function downloadErrorsImport()
     {
-        $file = GC_PRIVATE_TEMP_DIR . '/import_module_errors.csv';
+        $file = gplcart_file_private_temp('import_module_errors.csv');
         if ($this->isQuery('download_errors') && is_file($file)) {
             $this->download($file);
         }
@@ -151,7 +151,7 @@ class Import extends BackendController
             return false;
         }
 
-        $result = $this->file->upload($file, 'csv', GC_PRIVATE_MODULE_DIR . '/import');
+        $result = $this->file->upload($file, 'csv', gplcart_file_private_module('import'));
 
         if ($result !== true) {
             $this->setError('file', $result);
@@ -213,7 +213,7 @@ class Import extends BackendController
                     '@url' => $this->url('', array('download_errors' => true))))
             ),
             'log' => array(
-                'errors' => GC_PRIVATE_TEMP_DIR . '/import_module_errors.csv'
+                'errors' => gplcart_file_private_temp('import_module_errors.csv')
             )
         );
 

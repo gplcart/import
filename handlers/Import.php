@@ -321,7 +321,7 @@ class Import
         }
 
         $path = trim($image, '/');
-        $file = gplcart_file_absolute_path($path);
+        $file = gplcart_file_absolute($path);
 
         if (!is_file($file)) {
             $vars = array('@name' => $path);

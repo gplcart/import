@@ -143,7 +143,7 @@ class Settings extends BackendController
     protected function validateHeaderSettings()
     {
         $errors = $header = array();
-        $lines = gplcart_string_array($this->getSubmitted('header', ''));
+        $lines = gplcart_string_explode_multiline($this->getSubmitted('header', ''));
 
         foreach ($lines as $pos => $line) {
 
