@@ -60,7 +60,7 @@ class Import extends BackendController
     {
         $this->downloadErrorsImport();
 
-        $settings = $this->config->module('import');
+        $settings = $this->config->getFromModule('import');
         $this->setData('settings', $settings);
 
         unset($settings['header']['product_id']);
@@ -174,8 +174,8 @@ class Import extends BackendController
             return null;
         }
 
-        $header = $this->config->module('import', 'header');
-        $delimiter = $this->config->module('import', 'delimiter');
+        $header = $this->config->getFromModule('import', 'header');
+        $delimiter = $this->config->getFromModule('import', 'delimiter');
 
         $real_header = $this->csv->setFile($this->getSubmitted('filepath'))
                 ->setHeader($header)
@@ -196,7 +196,7 @@ class Import extends BackendController
     {
         $submitted = $this->getSubmitted();
 
-        $settings = $this->config->module('import');
+        $settings = $this->config->getFromModule('import');
         $settings['mode'] = $submitted['mode'];
         $settings['update'] = $submitted['update'];
 
