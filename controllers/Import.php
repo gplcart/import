@@ -43,8 +43,7 @@ class Import extends BackendController
      * @param ModuleModel $module
      * @param CsvHelper $csv
      */
-    public function __construct(FileModel $file, ModuleModel $module,
-            CsvHelper $csv)
+    public function __construct(FileModel $file, ModuleModel $module, CsvHelper $csv)
     {
         parent::__construct();
 
@@ -200,7 +199,6 @@ class Import extends BackendController
         $settings['mode'] = $submitted['mode'];
         $settings['update'] = $submitted['update'];
 
-        // Memorize user choice
         $this->module->setSettings('import', $settings);
 
         $job = array(
