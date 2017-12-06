@@ -9,22 +9,11 @@
 
 namespace gplcart\modules\import;
 
-use gplcart\core\Module,
-    gplcart\core\Config;
-
 /**
  * Main class for Importer module
  */
-class Import extends Module
+class Import
 {
-
-    /**
-     * @param Config $config
-     */
-    public function __construct(Config $config)
-    {
-        parent::__construct($config);
-    }
 
     /**
      * Implements hook "route.list"
@@ -53,10 +42,7 @@ class Import extends Module
      */
     public function hookCron()
     {
-        // Automatically delete uploaded files older than 1 day
-        $lifespan = 24 * 60 * 60;
-        $directory = gplcart_file_private_module('import');
-        gplcart_file_empty($directory, array('csv'), $lifespan);
+        gplcart_file_empty(gplcart_file_private_module('import'), array('csv'), 24 * 60 * 60);
     }
 
     /**

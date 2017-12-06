@@ -10,8 +10,7 @@
 namespace gplcart\modules\import\controllers;
 
 use gplcart\core\helpers\Csv as CsvHelper;
-use gplcart\core\models\File as FileModel,
-    gplcart\core\models\Module as ModuleModel;
+use gplcart\core\models\File as FileModel;
 use gplcart\core\controllers\backend\Controller as BackendController;
 
 /**
@@ -19,12 +18,6 @@ use gplcart\core\controllers\backend\Controller as BackendController;
  */
 class Import extends BackendController
 {
-
-    /**
-     * Module model class instance
-     * @var \gplcart\core\models\Module $module
-     */
-    protected $module;
 
     /**
      * File model class instance
@@ -40,16 +33,14 @@ class Import extends BackendController
 
     /**
      * @param FileModel $file
-     * @param ModuleModel $module
      * @param CsvHelper $csv
      */
-    public function __construct(FileModel $file, ModuleModel $module, CsvHelper $csv)
+    public function __construct(FileModel $file, CsvHelper $csv)
     {
         parent::__construct();
 
         $this->csv = $csv;
         $this->file = $file;
-        $this->module = $module;
     }
 
     /**
@@ -59,7 +50,7 @@ class Import extends BackendController
     {
         $this->downloadErrorsImport();
 
-        $settings = $this->config->getFromModule('import');
+        $settings = $this->module->getSettings('import');
         $this->setData('settings', $settings);
 
         unset($settings['header']['product_id']);
@@ -173,8 +164,8 @@ class Import extends BackendController
             return null;
         }
 
-        $header = $this->config->getFromModule('import', 'header');
-        $delimiter = $this->config->getFromModule('import', 'delimiter');
+        $header = $this->module->getSettings('import', 'header');
+        $delimiter = $this->module->getSettings('import', 'delimiter');
 
         $real_header = $this->csv->setFile($this->getSubmitted('filepath'))
                 ->setHeader($header)
@@ -195,7 +186,7 @@ class Import extends BackendController
     {
         $submitted = $this->getSubmitted();
 
-        $settings = $this->config->getFromModule('import');
+        $settings = $this->module->getSettings('import');
         $settings['mode'] = $submitted['mode'];
         $settings['update'] = $submitted['update'];
 
