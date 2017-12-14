@@ -11,10 +11,10 @@ namespace gplcart\modules\import\handlers;
 
 use gplcart\core\helpers\Csv as CsvHelper;
 use gplcart\core\models\User as UserModel,
-    gplcart\core\models\File as FileModel,
     gplcart\core\models\Product as ProductModel,
-    gplcart\core\models\Language as LanguageModel,
-    gplcart\core\models\Validator as ValidatorModel;
+    gplcart\core\models\Translation as TranslationModel,
+    gplcart\core\models\Validator as ValidatorModel,
+    gplcart\core\models\FileTransfer as FileTransferModel;
 
 /**
  * Handler for Importer module
@@ -23,10 +23,10 @@ class Import
 {
 
     /**
-     * Language model instance
-     * @var \gplcart\core\models\Language $language
+     * Translation UI model instance
+     * @var \gplcart\core\models\Translation $translation
      */
-    protected $language;
+    protected $translation;
 
     /**
      * User model instance
@@ -41,10 +41,10 @@ class Import
     protected $validator;
 
     /**
-     * File model instance
-     * @var \gplcart\core\models\File $file
+     * File transfer model instance
+     * @var \gplcart\core\models\FileTransfer $file_transfer
      */
-    protected $file;
+    protected $file_transfer;
 
     /**
      * Product model instance
@@ -85,21 +85,21 @@ class Import
     /**
      * @param ProductModel $product
      * @param UserModel $user
-     * @param FileModel $file
-     * @param LanguageModel $language
+     * @param FileTransferModel $file_transfer
+     * @param TranslationModel $translation
      * @param ValidatorModel $validator
      * @param CsvHelper $csv
      */
     public function __construct(ProductModel $product, UserModel $user,
-            FileModel $file, LanguageModel $language, ValidatorModel $validator,
-            CsvHelper $csv)
+                                FileTransferModel $file_transfer, TranslationModel $translation, ValidatorModel $validator,
+                                CsvHelper $csv)
     {
         $this->csv = $csv;
         $this->user = $user;
-        $this->file = $file;
         $this->product = $product;
-        $this->language = $language;
         $this->validator = $validator;
+        $this->translation = $translation;
+        $this->file_transfer = $file_transfer;
     }
 
     /**
@@ -150,7 +150,7 @@ class Import
      */
     protected function logErrors($line, array $errors)
     {
-        $line_message = $this->language->text('Line @num', array('@num' => $line));
+        $line_message = $this->translation->text('Line @num', array('@num' => $line));
         $data = array($line_message, implode(PHP_EOL, $errors));
         return gplcart_file_csv($this->job['log']['errors'], $data);
     }
@@ -172,7 +172,7 @@ class Import
         $this->job['errors'] += $this->countErrors();
 
         $vars = array('@num' => $this->job['context']['line']);
-        $this->job['message']['process'] = $this->language->text('Last processed line: @num', $vars);
+        $this->job['message']['process'] = $this->translation->text('Last processed line: @num', $vars);
     }
 
     /**
@@ -224,17 +224,17 @@ class Import
     public function validate()
     {
         if (empty($this->data['update']) && !$this->user->access('product_add')) {
-            $this->setError($this->language->text('No access to add products'));
+            $this->setError($this->translation->text('No access to add products'));
             return false;
         }
 
         if (!empty($this->data['update']) && !$this->user->access('product_update')) {
-            $this->setError($this->language->text('No access to update products'));
+            $this->setError($this->translation->text('No access to update products'));
             return false;
         }
 
         if (!empty($this->data['images']) && !$this->user->access('file_upload')) {
-            $this->setError($this->language->text('No access to upload files'));
+            $this->setError($this->translation->text('No access to upload files'));
             return false;
         }
 
@@ -325,12 +325,12 @@ class Import
 
         if (!is_file($file)) {
             $vars = array('@name' => $path);
-            $error = $this->language->text('@name is unavailable', $vars);
+            $error = $this->translation->text('@name is unavailable', $vars);
             $this->setError($error);
             return false;
         }
 
-        $result = $this->file->validate($file);
+        $result = $this->file_transfer->validate($file);
 
         if ($result === true) {
             return $path;
@@ -348,10 +348,10 @@ class Import
     protected function downloadImage($url)
     {
         $path = $this->product->getImagePath();
-        $result = $this->file->download($url, 'image', $path);
+        $result = $this->file_transfer->download($url, 'image', $path);
 
         if ($result === true) {
-            return $this->file->getTransferred(true);
+            return $this->file_transfer->getTransferred(true);
         }
 
         $this->setError($result);

@@ -10,7 +10,7 @@
 namespace gplcart\modules\import\controllers;
 
 use gplcart\core\helpers\Csv as CsvHelper;
-use gplcart\core\models\File as FileModel;
+use gplcart\core\models\FileTransfer as FileTransferModel;
 use gplcart\core\controllers\backend\Controller as BackendController;
 
 /**
@@ -20,27 +20,27 @@ class Import extends BackendController
 {
 
     /**
-     * File model class instance
-     * @var \gplcart\core\models\File $file
+     * File transfer model class instance
+     * @var \gplcart\core\models\FileTransfer $file_transfer
      */
-    protected $file;
+    protected $file_transfer;
 
     /**
      * CSV helper class
      * @var \gplcart\core\helpers\Csv $csv
      */
     protected $csv;
-
+    
     /**
-     * @param FileModel $file
+     * @param FileTransferModel $file_transfer
      * @param CsvHelper $csv
      */
-    public function __construct(FileModel $file, CsvHelper $csv)
+    public function __construct(FileTransferModel $file_transfer, CsvHelper $csv)
     {
         parent::__construct();
 
         $this->csv = $csv;
-        $this->file = $file;
+        $this->file_transfer = $file_transfer;
     }
 
     /**
@@ -141,14 +141,14 @@ class Import extends BackendController
             return false;
         }
 
-        $result = $this->file->upload($file, 'csv', gplcart_file_private_module('import'));
+        $result = $this->file_transfer->upload($file, 'csv', gplcart_file_private_module('import'));
 
         if ($result !== true) {
             $this->setError('file', $result);
             return false;
         }
 
-        $uploaded = $this->file->getTransferred();
+        $uploaded = $this->file_transfer->getTransferred();
 
         $this->setSubmitted('filepath', $uploaded);
         $this->setSubmitted('filesize', filesize($uploaded));
@@ -174,7 +174,7 @@ class Import extends BackendController
 
         if ($header != $real_header) {
             $vars = array('@format' => implode(' | ', $header));
-            $error = $this->language->text('Wrong header. Required columns: @format', $vars);
+            $error = $this->text('Wrong header. Required columns: @format', $vars);
             $this->setError('file', $error);
         }
     }
