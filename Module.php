@@ -12,7 +12,7 @@ namespace gplcart\modules\import;
 /**
  * Main class for Importer module
  */
-class Import
+class Module
 {
 
     /**

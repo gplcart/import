@@ -112,7 +112,7 @@ class Import
         $this->rows = array();
         $this->errors = array();
 
-        $this->csv->setFile($this->job['data']['filepath'], $this->job['data']['filesize'])
+        $this->csv->open($this->job['data']['filepath'], $this->job['data']['filesize'])
                 ->setLimit($this->job['data']['limit'])
                 ->setHeader($this->job['data']['header'])
                 ->setDelimiter($this->job['data']['delimiter']);

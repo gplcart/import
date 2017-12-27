@@ -167,7 +167,7 @@ class Import extends BackendController
         $header = $this->module->getSettings('import', 'header');
         $delimiter = $this->module->getSettings('import', 'delimiter');
 
-        $real_header = $this->csv->setFile($this->getSubmitted('filepath'))
+        $real_header = $this->csv->open($this->getSubmitted('filepath'))
                 ->setHeader($header)
                 ->setDelimiter($delimiter)
                 ->getHeader();
