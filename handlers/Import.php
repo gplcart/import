@@ -9,6 +9,7 @@
 
 namespace gplcart\modules\import\handlers;
 
+use gplcart\core\Config;
 use gplcart\core\helpers\Csv as CsvHelper;
 use gplcart\core\models\User as UserModel,
     gplcart\core\models\Product as ProductModel,
@@ -21,6 +22,12 @@ use gplcart\core\models\User as UserModel,
  */
 class Import
 {
+
+    /**
+     * Config class instance
+     * @var \gplcart\core\Config $config
+     */
+    protected $config;
 
     /**
      * Translation UI model instance
@@ -83,6 +90,7 @@ class Import
     protected $data = array();
 
     /**
+     * @param Config $config
      * @param ProductModel $product
      * @param UserModel $user
      * @param FileTransferModel $file_transfer
@@ -90,10 +98,11 @@ class Import
      * @param ValidatorModel $validator
      * @param CsvHelper $csv
      */
-    public function __construct(ProductModel $product, UserModel $user,
-                                FileTransferModel $file_transfer, TranslationModel $translation, ValidatorModel $validator,
-                                CsvHelper $csv)
+    public function __construct(Config $config, ProductModel $product, UserModel $user,
+            FileTransferModel $file_transfer, TranslationModel $translation,
+            ValidatorModel $validator, CsvHelper $csv)
     {
+        $this->config = $config;
         $this->csv = $csv;
         $this->user = $user;
         $this->product = $product;
@@ -347,7 +356,9 @@ class Import
      */
     protected function downloadImage($url)
     {
-        $path = $this->product->getImagePath();
+        $dirname = $this->config->get('product_image_dirname', 'product');
+        $path = gplcart_path_relative(GC_DIR_IMAGE, GC_DIR_FILE) . "/$dirname";
+
         $result = $this->file_transfer->download($url, 'image', $path);
 
         if ($result === true) {
