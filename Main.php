@@ -40,7 +40,7 @@ class Main
     /**
      * Implements hook "hook.cron"
      */
-    public function hookCron()
+    public function hookCronRunAfter()
     {
         gplcart_file_empty(gplcart_file_private_module('import'), array('csv'), 24 * 60 * 60);
     }
