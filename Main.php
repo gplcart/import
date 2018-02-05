@@ -29,7 +29,9 @@ class Main
         );
 
         $routes['admin/tool/import'] = array(
-            'menu' => array('admin' => /* @text */'Import'),
+            'menu' => array(
+                'admin' => 'Import' // @text
+            ),
             'access' => 'import_product',
             'handlers' => array(
                 'controller' => array('gplcart\\modules\\import\\controllers\\Import', 'doImport')
@@ -51,7 +53,7 @@ class Main
      */
     public function hookUserRolePermissions(array &$permissions)
     {
-        $permissions['import_product'] = /* @text */'Importer: import products';
+        $permissions['import_product'] = 'Importer: import products'; // @text
     }
 
     /**
