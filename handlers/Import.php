@@ -10,12 +10,12 @@
 namespace gplcart\modules\import\handlers;
 
 use gplcart\core\Config;
-use gplcart\core\helpers\Csv as CsvHelper;
-use gplcart\core\models\User as UserModel,
-    gplcart\core\models\Product as ProductModel,
-    gplcart\core\models\Translation as TranslationModel,
-    gplcart\core\models\Validator as ValidatorModel,
-    gplcart\core\models\FileTransfer as FileTransferModel;
+use gplcart\core\models\FileTransfer;
+use gplcart\core\models\Product;
+use gplcart\core\models\Translation;
+use gplcart\core\models\User;
+use gplcart\core\models\Validator;
+use gplcart\modules\import\helpers\Csv;
 
 /**
  * Handler for Importer module
@@ -61,7 +61,7 @@ class Import
 
     /**
      * CSV class instance
-     * @var \gplcart\core\helpers\Csv $csv
+     * @var \gplcart\modules\import\helpers\Csv $csv
      */
     protected $csv;
 
@@ -91,20 +91,19 @@ class Import
 
     /**
      * @param Config $config
-     * @param ProductModel $product
-     * @param UserModel $user
-     * @param FileTransferModel $file_transfer
-     * @param TranslationModel $translation
-     * @param ValidatorModel $validator
-     * @param CsvHelper $csv
+     * @param Product $product
+     * @param User $user
+     * @param FileTransfer $file_transfer
+     * @param Translation $translation
+     * @param Validator $validator
+     * @param Csv $csv
      */
-    public function __construct(Config $config, ProductModel $product, UserModel $user,
-            FileTransferModel $file_transfer, TranslationModel $translation,
-            ValidatorModel $validator, CsvHelper $csv)
+    public function __construct(Config $config, Product $product, User $user,
+                                FileTransfer $file_transfer, Translation $translation, Validator $validator, Csv $csv)
     {
-        $this->config = $config;
         $this->csv = $csv;
         $this->user = $user;
+        $this->config = $config;
         $this->product = $product;
         $this->validator = $validator;
         $this->translation = $translation;
@@ -122,9 +121,9 @@ class Import
         $this->errors = array();
 
         $this->csv->open($this->job['data']['filepath'], $this->job['data']['filesize'])
-                ->setLimit($this->job['data']['limit'])
-                ->setHeader($this->job['data']['header'])
-                ->setDelimiter($this->job['data']['delimiter']);
+            ->setLimit($this->job['data']['limit'])
+            ->setHeader($this->job['data']['header'])
+            ->setDelimiter($this->job['data']['delimiter']);
 
         if (empty($this->job['context']['offset'])) {
             $this->rows = $this->csv->skipHeader()->parse();
@@ -143,11 +142,13 @@ class Import
     protected function countErrors()
     {
         $count = 0;
+
         foreach ($this->errors as $line => $errors) {
             $errors = array_filter($errors);
             $count += count($errors);
             $this->logErrors($line, $errors);
         }
+
         return $count;
     }
 
@@ -160,8 +161,7 @@ class Import
     protected function logErrors($line, array $errors)
     {
         $line_message = $this->translation->text('Line @num', array('@num' => $line));
-        $data = array($line_message, implode(PHP_EOL, $errors));
-        return gplcart_file_csv($this->job['log']['errors'], $data);
+        return gplcart_file_csv($this->job['log']['errors'], array($line_message, implode(PHP_EOL, $errors)));
     }
 
     /**
@@ -179,7 +179,6 @@ class Import
         }
 
         $this->job['errors'] += $this->countErrors();
-
         $vars = array('@num' => $this->job['context']['line']);
         $this->job['message']['process'] = $this->translation->text('Last processed line: @num', $vars);
     }
@@ -203,7 +202,7 @@ class Import
      */
     protected function prepare(array $row)
     {
-        $this->job['context']['line'] ++;
+        $this->job['context']['line']++;
         $this->data = array_filter(array_map('trim', $row));
 
         if (isset($this->data['product_id']) && $this->data['product_id'] !== '') {
@@ -281,11 +280,11 @@ class Import
         }
 
         if (empty($this->data['update']) && $this->product->add($this->data)) {
-            $this->job['inserted'] ++;
+            $this->job['inserted']++;
         }
 
         if (!empty($this->data['update']) && $this->product->update($this->data['product_id'], $this->data)) {
-            $this->job['updated'] ++;
+            $this->job['updated']++;
         }
     }
 
@@ -308,12 +307,14 @@ class Import
     protected function getImages($string)
     {
         $images = array();
+
         foreach ($this->explodeValues($string) as $image) {
             $path = $this->getImagePath($image);
             if (!empty($path)) {
                 $images[] = array('path' => $path);
             }
         }
+
         return $images;
     }
 

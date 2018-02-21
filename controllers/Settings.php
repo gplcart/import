@@ -9,12 +9,12 @@
 
 namespace gplcart\modules\import\controllers;
 
-use gplcart\core\controllers\backend\Controller as BackendController;
+use gplcart\core\controllers\backend\Controller;
 
 /**
  * Handles incoming requests and outputs data related to Importer module
  */
-class Settings extends BackendController
+class Settings extends Controller
 {
 
     /**
@@ -26,19 +26,18 @@ class Settings extends BackendController
     }
 
     /**
-     * Route page callback to display the module settings page
+     * Route page callback
+     * Display the module settings page
      */
     public function editSettings()
     {
         $this->downloadTemplateSettings();
-
         $this->setTitleEditSettings();
         $this->setBreadcrumbEditSettings();
 
         $this->setData('settings', $this->module->getSettings('import'));
 
         $this->submitSettings();
-
         $this->setDataEditSettings();
         $this->outputEditSettings();
     }
@@ -61,10 +60,12 @@ class Settings extends BackendController
         $header = $this->getData('settings.header');
 
         if (is_array($header)) {
+
             $string = '';
             foreach ($header as $key => $value) {
                 $string .= "$key $value\n";
             }
+
             $this->setData('settings.header', trim($string));
         }
     }
@@ -74,8 +75,7 @@ class Settings extends BackendController
      */
     protected function setTitleEditSettings()
     {
-        $vars = array('%name' => $this->text('Importer'));
-        $title = $this->text('Edit %name settings', $vars);
+        $title = $this->text('Edit %name settings', array('%name' => $this->text('Importer')));
         $this->setTitle($title);
     }
 

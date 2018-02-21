@@ -9,14 +9,14 @@
 
 namespace gplcart\modules\import\controllers;
 
-use gplcart\core\helpers\Csv as CsvHelper;
-use gplcart\core\models\FileTransfer as FileTransferModel;
-use gplcart\core\controllers\backend\Controller as BackendController;
+use gplcart\core\controllers\backend\Controller;
+use gplcart\core\models\FileTransfer;
+use gplcart\modules\import\helpers\Csv;
 
 /**
  * Handles incoming requests and outputs data related to Import module
  */
-class Import extends BackendController
+class Import extends Controller
 {
 
     /**
@@ -27,15 +27,15 @@ class Import extends BackendController
 
     /**
      * CSV helper class
-     * @var \gplcart\core\helpers\Csv $csv
+     * @var \gplcart\modules\import\helpers\Csv $csv
      */
     protected $csv;
-    
+
     /**
-     * @param FileTransferModel $file_transfer
-     * @param CsvHelper $csv
+     * @param FileTransfer $file_transfer
+     * @param Csv $csv
      */
-    public function __construct(FileTransferModel $file_transfer, CsvHelper $csv)
+    public function __construct(FileTransfer $file_transfer, Csv $csv)
     {
         parent::__construct();
 
@@ -57,7 +57,6 @@ class Import extends BackendController
         $this->setData('columns', $settings['header']);
 
         $this->submitImport();
-
         $this->setTitleDoImport();
         $this->setBreadcrumbDoImport();
 
@@ -99,6 +98,7 @@ class Import extends BackendController
     protected function downloadErrorsImport()
     {
         $file = gplcart_file_private_temp('import_module_errors.csv');
+
         if ($this->isQuery('download_errors') && is_file($file)) {
             $this->download($file);
         }
@@ -121,7 +121,6 @@ class Import extends BackendController
     protected function validateImport()
     {
         $this->setSubmitted('settings');
-
         $this->validateFileImport();
         $this->validateHeaderImport();
 
@@ -160,22 +159,20 @@ class Import extends BackendController
      */
     public function validateHeaderImport()
     {
-        if ($this->isError()) {
-            return null;
-        }
+        if (!$this->isError()) {
 
-        $header = $this->module->getSettings('import', 'header');
-        $delimiter = $this->module->getSettings('import', 'delimiter');
+            $header = $this->module->getSettings('import', 'header');
+            $delimiter = $this->module->getSettings('import', 'delimiter');
 
-        $real_header = $this->csv->open($this->getSubmitted('filepath'))
+            $real_header = $this->csv->open($this->getSubmitted('filepath'))
                 ->setHeader($header)
                 ->setDelimiter($delimiter)
                 ->getHeader();
 
-        if ($header != $real_header) {
-            $vars = array('@format' => implode(' | ', $header));
-            $error = $this->text('Wrong header. Required columns: @format', $vars);
-            $this->setError('file', $error);
+            if ($header != $real_header) {
+                $error = $this->text('Wrong header. Required columns: @format', array('@format' => implode(' | ', $header)));
+                $this->setError('file', $error);
+            }
         }
     }
 
