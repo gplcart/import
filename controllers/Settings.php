@@ -18,14 +18,6 @@ class Settings extends Controller
 {
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Route page callback
      * Display the module settings page
      */
@@ -159,8 +151,7 @@ class Settings extends Controller
         if (empty($errors)) {
             $this->setSubmitted('header', $header);
         } else {
-            $vars = array('@num' => implode(',', $errors));
-            $this->setError('header', $this->text('Error on line @num', $vars));
+            $this->setError('header', $this->text('Error on line @num', array('@num' => implode(',', $errors))));
         }
     }
 

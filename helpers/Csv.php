@@ -9,12 +9,13 @@
 
 namespace gplcart\modules\import\helpers;
 
+use Iterator;
 use UnexpectedValueException;
 
 /**
  * Provides methods to read CSV data
  */
-class Csv
+class Csv implements Iterator
 {
 
     /**
@@ -27,13 +28,18 @@ class Csv
      * Current CSV line
      * @var string
      */
-    protected $current_line;
+    protected $line;
+
+    /**
+     * @var int
+     */
+    protected $key;
 
     /**
      * Current offset in bytes
      * @var integer
      */
-    protected $current_position;
+    protected $position;
 
     /**
      * Total CSV file size in bytes
@@ -57,7 +63,7 @@ class Csv
      * Final offset in bytes
      * @var integer
      */
-    protected $last_position = 0;
+    protected $last = 0;
 
     /**
      * Starting offset in bytes
@@ -96,7 +102,9 @@ class Csv
      */
     public function __destruct()
     {
-        $this->close();
+        if (is_resource($this->handle)) {
+            fclose($this->handle);
+        }
     }
 
     /**
@@ -116,16 +124,6 @@ class Csv
         $this->file = $file;
         $this->total = isset($filesize) ? (int) $filesize : filesize($file);
         return $this;
-    }
-
-    /**
-     * Close file handle
-     */
-    public function close()
-    {
-        if (is_resource($this->handle)) {
-            fclose($this->handle);
-        }
     }
 
     /**
@@ -158,6 +156,7 @@ class Csv
     {
         $this->limit = 1;
         $header = $this->read();
+
         return empty($header) ? array() : reset($header);
     }
 
@@ -180,8 +179,10 @@ class Csv
     {
         $rows = array();
 
-        $start = $this->offset ? $this->offset : $this->last_position;
-        $this->last_position = 0;
+        $start = $this->offset ? $this->offset : $this->last;
+
+        $this->key = 0;
+        $this->last = 0;
 
         $parsed = 0;
         for ($this->rewind($start); $this->valid(); $this->next()) {
@@ -270,14 +271,16 @@ class Csv
                 $row = $fields;
             }
 
-            $rows[] = $row;
+            $rows[$this->key] = $row;
 
             $parsed++;
 
             if (!empty($this->limit) && $parsed >= $this->limit) {
-                $this->last_position = $this->currentPosition();
+                $this->last = $this->getPosition();
                 break;
             }
+
+            $this->key++;
         }
 
         return $rows;
@@ -287,7 +290,7 @@ class Csv
      * Moves pointer to a certain position
      * @param integer $position
      */
-    protected function rewind($position = 0)
+    public function rewind($position = 0)
     {
         if (isset($this->handle)) {
             fseek($this->handle, $position);
@@ -299,12 +302,12 @@ class Csv
      * Sets current string and offset
      * @return null|integer
      */
-    protected function next()
+    public function next()
     {
         if (isset($this->handle)) {
-            $this->current_line = feof($this->handle) ? null : fgets($this->handle);
-            $this->current_position = ftell($this->handle);
-            return $this->current_line;
+            $this->line = feof($this->handle) ? null : fgets($this->handle);
+            $this->position = ftell($this->handle);
+            return $this->line;
         }
 
         return null;
@@ -314,27 +317,36 @@ class Csv
      * Determines if CSV line is valid
      * @return boolean
      */
-    protected function valid()
+    public function valid()
     {
-        return isset($this->current_line);
+        return isset($this->line);
     }
 
     /**
      * Gets current CSV row
      * @return string
      */
-    protected function current()
+    public function current()
     {
-        return $this->current_line;
+        return $this->line;
+    }
+
+    /**
+     * Row key
+     * @return int
+     */
+    public function key()
+    {
+        return $this->key;
     }
 
     /**
      * Gets current offset in bytes
      * @return integer
      */
-    protected function currentPosition()
+    public function getPosition()
     {
-        return $this->current_position;
+        return $this->position;
     }
 
     /**
@@ -343,7 +355,7 @@ class Csv
      */
     public function getOffset()
     {
-        return $this->last_position;
+        return $this->last;
     }
 
     /**

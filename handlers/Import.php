@@ -99,7 +99,8 @@ class Import
      * @param Csv $csv
      */
     public function __construct(Config $config, Product $product, User $user,
-                                FileTransfer $file_transfer, Translation $translation, Validator $validator, Csv $csv)
+                                FileTransfer $file_transfer, Translation $translation,
+                                Validator $validator, Csv $csv)
     {
         $this->csv = $csv;
         $this->user = $user;
